@@ -1,6 +1,8 @@
 from blacksheep.server.controllers import Controller, get, post
 from blacksheep import Request, redirect
-import bcrypt, sqlite3
+from app.env import DB_CONN_STR
+import psycopg2 as pg
+import bcrypt
 
 
 class Signup(Controller):
@@ -16,9 +18,9 @@ class Signup(Controller):
         confirm  = form["confirm"]
         email    = form["email"]
 
-        with sqlite3.connect("proj.db") as conn:
+        with pg.connect(DB_CONN_STR) as conn:
             cur = conn.cursor()
-            cur.execute("SELECT password, email FROM users WHERE username=?", (username,))
+            cur.execute("SELECT password, email FROM users WHERE username=%s", (username,))
             user = cur.fetchone()
 
         if user is None and password == confirm:
@@ -27,10 +29,10 @@ class Signup(Controller):
             salt = bcrypt.gensalt()
             pass_hash = bcrypt.hashpw(pass_bytes, salt)
 
-            with sqlite3.connect("proj.db") as conn:
+            with pg.connect(DB_CONN_STR) as conn:
                 cur = conn.cursor()
                 cur.execute(
-                    "INSERT INTO users(username, password, email) VALUES(?, ?, ?)", 
+                    "INSERT INTO users(username, password, email) VALUES(%s, %s, %s)", 
                     (username, pass_hash, email)
                 )
                 conn.commit()

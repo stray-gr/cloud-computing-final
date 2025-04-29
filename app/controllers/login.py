@@ -1,6 +1,8 @@
 from blacksheep.server.controllers import Controller, get, post
 from blacksheep import Request, redirect
-import bcrypt, sqlite3
+from app.env import DB_CONN_STR
+import psycopg2 as pg
+import bcrypt
 
 
 class Login(Controller):
@@ -15,12 +17,12 @@ class Login(Controller):
         password = form["password"].encode("utf-8")
         email = form["email"]
 
-        with sqlite3.connect("proj.db") as conn:
+        with pg.connect(DB_CONN_STR) as conn:
             cur = conn.cursor()
-            cur.execute("SELECT password, email FROM users WHERE username=?", (username,))
-            user = cur.fetchone()
+            cur.execute("SELECT password, email FROM users WHERE username=%s", (username,))
+            u = cur.fetchone()
 
-        if user is not None and bcrypt.checkpw(password, user[0]) and email == user[1]:
+        if u is not None and bcrypt.checkpw(password, u[0].tobytes()) and email == u[1]:
             # success
             session = req.session
             session.set("auth", True)

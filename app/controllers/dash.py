@@ -1,6 +1,7 @@
 from blacksheep.server.controllers import Controller, get
 from blacksheep import Request, Response, redirect
-import sqlite3
+from app.env import DB_CONN_STR
+import psycopg2 as pg
 
 
 HEADER = [
@@ -28,10 +29,6 @@ HEADER = [
 
 
 class Dash(Controller):
-    @get("/lol")
-    def idk(self, req: Request):
-        print(req.query.get("bruh"))
-
     @get("/dash")
     def index(self, req: Request):
         session = req.session
@@ -42,11 +39,10 @@ class Dash(Controller):
         hshd_num = req.query.get("hshd", ["0010"])[0]
         offset = 0
 
-        # SELECT DISTINCT HSHD_NUM FROM households;
-        with sqlite3.connect("proj.db") as conn:
+        with pg.connect(DB_CONN_STR) as conn:
             cur = conn.cursor()
 
-            cur.execute("SELECT DISTINCT HSHD_NUM FROM households;")
+            cur.execute("SELECT DISTINCT HSHD_NUM FROM households ORDER BY HSHD_NUM ASC;")
             hshd_list = list(map(lambda r: r[0], cur.fetchall()))[:-1]
 
             cur.execute(
@@ -58,11 +54,11 @@ class Dash(Controller):
                     INNER JOIN 
                         households h on 
                             t.HSHD_NUM = h.HSHD_NUM and 
-                            t.HSHD_NUM like ?
+                            t.HSHD_NUM like %s
                     INNER JOIN
                         products p on
                             t.PRODUCT_NUM = p.PRODUCT_NUM
-                    LIMIT 10 OFFSET ?;
+                    LIMIT 10 OFFSET %s;
                 ''',
                 (hshd_num, offset,)
             )
@@ -81,7 +77,7 @@ class Dash(Controller):
             }, 
         )
 
-    @get("/dash/{hshd_num}/{offset}")
+    @get("/dash/data/{hshd_num}/{offset}")
     def data(self, req: Request):
         session = req.session
         if not session.get("auth", False): 
@@ -99,7 +95,7 @@ class Dash(Controller):
         if offset < 0:
             return Response(204)
 
-        with sqlite3.connect("proj.db") as conn:
+        with pg.connect(DB_CONN_STR) as conn:
             cur = conn.cursor()
             cur.execute(
                 '''
@@ -110,11 +106,11 @@ class Dash(Controller):
                     INNER JOIN 
                         households h on 
                             t.HSHD_NUM = h.HSHD_NUM and 
-                            t.HSHD_NUM like ?
+                            t.HSHD_NUM like %s
                     INNER JOIN
                         products p on
                             t.PRODUCT_NUM = p.PRODUCT_NUM
-                    LIMIT 10 OFFSET ?;
+                    LIMIT 10 OFFSET %s;
                 ''',
                 (hshd_num, offset,)
             )
@@ -129,5 +125,55 @@ class Dash(Controller):
                 "header": HEADER, 
                 "rows": rows, 
                 "row_count": len(rows),
+            }, 
+        )
+
+    @get("/dash/latest/{hshd_num}")
+    def latest(self, req: Request):
+        session = req.session
+        if not session.get("auth", False): 
+            # not auth
+            return redirect("/")
+
+        hshd_num = req.route_values["hshd_num"]
+        count_str = req.query.get("count", ["10"])[0]
+
+        try:
+            count = int(count_str)
+        except (TypeError, ValueError):
+            count = 10
+
+        if count < 0:
+            return Response(204)
+
+        with pg.connect(DB_CONN_STR) as conn:
+            cur = conn.cursor()
+            cur.execute(
+                '''
+                    SELECT 
+                        h.*, p.*, t.BASKET_NUMBER, t.SPEND, t.UNITS, t.STORE_R, t.PURCHASE, t.YEAR
+                    FROM 
+                        transactions t 
+                    INNER JOIN 
+                        households h on 
+                            t.HSHD_NUM = h.HSHD_NUM and 
+                            t.HSHD_NUM like %s
+                    INNER JOIN
+                        products p on
+                            t.PRODUCT_NUM = p.PRODUCT_NUM
+                    ORDER BY PURCHASE DESC;
+                ''',
+                (hshd_num,)
+            )
+            rows = cur.fetchmany(count)
+
+        return self.view(
+            name="latest", 
+            request=req,
+            model={
+                "hshd": hshd_num,
+                "count": count,
+                "header": HEADER, 
+                "rows": rows, 
             }, 
         )

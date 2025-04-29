@@ -36,9 +36,14 @@ sudo -u postgres psql -d cloud
 \copy households FROM 'sql/households.csv' (format csv, null "null", DELIMITER ',', HEADER);
 \copy products FROM 'sql/products.csv' (format csv, null "null", DELIMITER ',', HEADER);
 \copy transactions FROM 'sql/transactions.csv' (format csv, null "null", DELIMITER ',', HEADER);
+
 create role app with login password '{password}';
+GRANT CONNECT ON DATABASE cloud to app;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO app;
 GRANT INSERT ON ALL TABLES IN SCHEMA public TO app;
+GRANT USAGE ON SEQUENCE public.users_id_seq TO app;
+
+sudo -u postgres psql -U app -h localhost cloud
 ```
 
 ```sql

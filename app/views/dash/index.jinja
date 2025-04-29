@@ -4,7 +4,7 @@
     {% include "header.html" %}
     <div class="flex flex-row items-center mt-4">
         <div class="grow"></div>
-        <p class="font-bold text-lg">HH No.</p>
+        <p class="font-bold text-xl">HH No.</p>
         <select 
             class="border border-black font-semibold mx-2 p-1"
             name="hshd" hx-get="/dash" hx-target="#frame" hx-swap="outerHTML"
@@ -22,10 +22,10 @@
             {% endfor %}
         </select>
         <button 
-            class="bg-sky-700 border border-black font-semibold text-white p-1" 
+            class="bg-red-400 border border-black font-semibold text-white p-1" 
             disabled
         >
-           View/Load Latest Transactions 
+            View Market Metrics
         </button>
         <div class="grow"></div>
     </div>

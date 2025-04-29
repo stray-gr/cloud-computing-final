@@ -1,4 +1,7 @@
-<div id="data" class="flex flex-col w-screen overflow-auto p-4">
+<div id="data" class="flex flex-col w-screen h-7/8 overflow-auto p-4">
+    <h1 class="font-semibold text-center text-lg underline">
+        First {{offset}} - {{offset + 10}} Transactions for HH No. {{hshd}}
+    </h1>
     <div class="flex flex-row items-center">
         <div class="grow"></div>
         {% if row_count == 10 %}
@@ -7,18 +10,21 @@
                 <button 
                     dir="ltr" 
                     class="border rounded-s-lg font-semibold text-sm p-1 mr-1"
-                    hx-get="/dash/{{hshd}}/{{offset - 10}}" 
+                    hx-get="/dash/data/{{hshd}}/{{offset - 10}}" 
                     hx-target="#data" hx-swap="outerHTML"
                 >
                     Prev 10 Rows
                 </button>
-                <h1 class="font-semibold underline">
-                    Rows {{offset}} - {{offset + 10}} for HH No. {{hshd}}
-                </h1>
+                <button 
+                    class="bg-sky-700 border border-black font-semibold text-white text-sm p-1" 
+                    hx-get="/dash/latest/{{hshd}}" hx-target="#data" hx-swap="outerHTML"
+                >
+                    View/Load Latest Transactions 
+                </button>
                 <button 
                     dir="rtl" 
                     class="border rounded-s-lg font-semibold text-sm p-1 ml-1"
-                    hx-get="/dash/{{hshd}}/{{offset + 10}}" 
+                    hx-get="/dash/data/{{hshd}}/{{offset + 10}}" 
                     hx-target="#data" hx-swap="outerHTML"
                 >
                     Next 10 Rows
@@ -28,19 +34,22 @@
                 <button 
                     dir="ltr" 
                     class="border rounded-s-lg font-semibold text-sm p-1 mr-1"
-                    hx-get="/dash/{{hshd}}/{{offset - 10}}"
+                    hx-get="/dash/data/{{hshd}}/{{offset - 10}}"
                     hx-target="#data" hx-swap="outerHTML"
                     disabled
                 >
                     Prev 10 Rows
                 </button>
-                <h1 class="font-semibold underline">
-                    Rows {{offset}} - {{offset + 10}} for HH No. {{hshd}}
-                </h1>
+                <button 
+                    class="bg-sky-700 border border-black font-semibold text-white text-sm p-1" 
+                    hx-get="/dash/latest/{{hshd}}" hx-target="#data" hx-swap="outerHTML"
+                >
+                    View/Load Latest Transactions 
+                </button>
                 <button 
                     dir="rtl" 
                     class="border rounded-s-lg font-semibold text-sm p-1 ml-1"
-                    hx-get="/dash/{{hshd}}/{{offset + 10}}" 
+                    hx-get="/dash/data/{{hshd}}/{{offset + 10}}" 
                     hx-target="#data" hx-swap="outerHTML"
                 >
                     Next 10 Rows
@@ -52,18 +61,21 @@
                 <button 
                     dir="ltr" 
                     class="border rounded-s-lg font-semibold text-sm p-1 mr-1"
-                    hx-get="/dash/{{hshd}}/{{offset - 10}}" 
+                    hx-get="/dash/data/{{hshd}}/{{offset - 10}}" 
                     hx-target="#data" hx-swap="outerHTML"
                 >
                     Prev 10 Rows
                 </button>
-                <h1 class="font-semibold underline">
-                    Rows {{offset}} - {{offset + 10}} for HH No. {{hshd}}
-                </h1>
+                <button 
+                    class="bg-sky-700 border border-black font-semibold text-white text-sm p-1" 
+                    hx-get="/dash/latest/{{hshd}}" hx-target="#data" hx-swap="outerHTML"
+                >
+                    View/Load Latest Transactions 
+                </button>
                 <button 
                     dir="rtl" 
                     class="border rounded-s-lg font-semibold text-sm p-1 ml-1"
-                    hx-get="/dash/{{hshd}}/{{offset + 10}}" 
+                    hx-get="/dash/data/{{hshd}}/{{offset + 10}}" 
                     hx-target="#data" hx-swap="outerHTML"
                     disabled
                 >
@@ -71,9 +83,12 @@
                 </button>
             {% else %}
                 {# Less than 10 rows, at beginning -> can't move #}
-                <h1 class="font-semibold underline">
-                    Rows {{offset}} - {{offset + 10}} for HH No. {{hshd}}
-                </h1>
+                <button 
+                    class="bg-sky-700 border border-black font-semibold text-white text-sm p-1" 
+                    hx-get="/dash/latest/{{hshd}}" hx-target="#data" hx-swap="outerHTML"
+                >
+                    View/Load Latest Transactions 
+                </button>
             {% endif %}
         {% endif %}
         <div class="grow"></div>
