@@ -6,12 +6,11 @@ from blacksheep.server.csrf import use_anti_forgery
 from blacksheep.server.diagnostics import get_diagnostic_app
 from rodi import Container
 
+from app.env import SECRET_KEY, SESSION_COOKIE
 from app.errors import configure_error_handlers
 from app.services import configure_services
 from app.settings import Settings
 from app.templating import configure_templating
-
-import env
 
 
 def configure_application(
@@ -21,8 +20,8 @@ def configure_application(
     app = Application(services=services)
     app.serve_files("app/static")
     app.use_sessions(
-        secret_key=env.SECRET_KEY,
-        session_cookie=env.SESSION_COOKIE
+        secret_key=SECRET_KEY,
+        session_cookie=SESSION_COOKIE
     )
     configure_error_handlers(app)
     configure_templating(app, settings)

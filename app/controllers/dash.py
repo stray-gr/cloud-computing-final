@@ -28,19 +28,27 @@ HEADER = [
 
 
 class Dash(Controller):
-    @get("/dash/{hshd_num}")
+    @get("/lol")
+    def idk(self, req: Request):
+        print(req.query.get("bruh"))
+
+    @get("/dash")
     def index(self, req: Request):
         session = req.session
         if not session.get("auth", False): 
             # not auth
             return redirect("/")
 
-        hshd_num = req.route_values["hshd_num"]
+        hshd_num = req.query.get("hshd", ["0010"])[0]
         offset = 0
 
         # SELECT DISTINCT HSHD_NUM FROM households;
         with sqlite3.connect("proj.db") as conn:
             cur = conn.cursor()
+
+            cur.execute("SELECT DISTINCT HSHD_NUM FROM households;")
+            hshd_list = list(map(lambda r: r[0], cur.fetchall()))[:-1]
+
             cur.execute(
                 '''
                     SELECT 
@@ -64,11 +72,12 @@ class Dash(Controller):
             name="index", 
             request=req,
             model={
-                "hshd": hshd_num,
+                "hshd_list": hshd_list,
+                "row_count": len(rows),
                 "offset": offset,
+                "hshd": hshd_num,
                 "header": HEADER, 
                 "rows": rows, 
-                "row_count": len(rows),
             }, 
         )
 

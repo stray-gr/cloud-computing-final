@@ -2,10 +2,31 @@
 {%- block body -%}
 <div id="frame">
     {% include "header.html" %}
-    <div class="flex flex-row">
+    <div class="flex flex-row items-center mt-4">
         <div class="grow"></div>
-        <div>DROPDOWN</div>
-        <div>VIEW LATEST</div>
+        <p class="font-bold text-lg">HH No.</p>
+        <select 
+            class="border border-black font-semibold mx-2 p-1"
+            name="hshd" hx-get="/dash" hx-target="#frame" hx-swap="outerHTML"
+        >
+            {% for hh in hshd_list %}
+                {% if hh != hshd %}
+                    <option value="{{hh}}">
+                        {{hh}}
+                    </option>
+                {% else %}
+                    <option value="{{hh}}" selected>
+                        {{hh}}
+                    </option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <button 
+            class="bg-sky-700 border border-black font-semibold text-white p-1" 
+            disabled
+        >
+           View/Load Latest Transactions 
+        </button>
         <div class="grow"></div>
     </div>
     {% include "dash/data.jinja" %}

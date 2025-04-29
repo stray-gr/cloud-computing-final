@@ -2,25 +2,24 @@
 {%- block body -%}
 <div id="frame">
     {% include "header.html" %}
-    <h1 class="font-bold text-lg text-center">Welcome back {{name}}!</h1>
+    <h1 class="font-bold text-4xl text-center my-4">Welcome back {{name}}!</h1>
     <div class="flex flex-row">
         <div class="grow"></div>
         <div class="flex flex-col w-1/3">
             <button 
-                class="" 
-                hx-get="/dash/0010" hx-target="#frame" hx-swap="outerHTML"
+                class="bg-sky-700 border border-black font-semibold text-white text-lg my-1 p-1" 
+                hx-get="/dash" hx-target="#frame" hx-swap="outerHTML"
             >
-                View data tables
+                View Transactions
             </button>
             <button 
-                class="" 
+                class="bg-red-400 border border-black font-semibold text-white text-lg my-1 p-1" 
                 disabled
             >
-                View metrics
+                View Market Metrics
             </button>
         </div>
         <div class="grow"></div>
     </div>
-    {% include "dash/data.jinja" %}
 </div>
 {%- endblock -%}
