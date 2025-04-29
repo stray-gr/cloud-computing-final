@@ -1,0 +1,37 @@
+{%- extends "layout.jinja" -%}
+{%- block body -%}
+<div id="frame">
+    {% include "header.html" %}
+    <form 
+        class="flex flex-row w-screen my-10" 
+        hx-post="/auth-user" hx-target="#frame" hx-swap="outerHTML"
+    >
+        {% af_input %}
+        <div class="grow"></div>
+        <div class="grid grid-cols-3 gap-1">
+            <p class="justify-self-end font-semibold">Username:</p>
+            <input class="col-span-2 border pl-1" name="username" required>
+            <p class="justify-self-end font-semibold">Password:</p>
+            <input class="col-span-2 border pl-1" name="password" type="password" required>
+            <p class="justify-self-end font-semibold">Email:</p>
+            <input class="col-span-2 border pl-1" name="email" type="email" required>
+            <button 
+                class="col-start-2 bg-green-700 border border-black font-semibold text-white p-1" 
+                type="submit"
+            >
+                Login
+            </button>
+            <button 
+                class="font-semibold text-sky-600 underline p-1" 
+                hx-get="/signup" hx-target="#frame" hx-swap="outerHTML"
+            >
+                Don't have an account? Sign Up here
+            </button>
+            <p class="col-start-2 font-semibold text-red-400 text-center">
+                {{error}}
+            </p>
+        </div>
+        <div class="grow"></div>
+    </form>
+</div>
+{%- endblock -%}

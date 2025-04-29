@@ -1,0 +1,13 @@
+{%- extends "layout.jinja" -%}
+{%- block body -%}
+<div id="frame">
+    {% include "header.html" %}
+    <div class="flex flex-row">
+        <div class="grow"></div>
+        <div>DROPDOWN</div>
+        <div>VIEW LATEST</div>
+        <div class="grow"></div>
+    </div>
+    {% include "dash/data.jinja" %}
+</div>
+{%- endblock -%}

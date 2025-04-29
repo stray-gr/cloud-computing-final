@@ -1,0 +1,95 @@
+<div id="data" class="flex flex-col w-screen overflow-auto p-4">
+    <div class="flex flex-row">
+        <div class="grow"></div>
+        {% if row_count == 10 %}
+            {% if offset > 0 %}
+                {# Full 10 rows, not at beginning -> can move forward or backward #}
+                <button 
+                    dir="ltr" 
+                    class="border rounded-s-lg font-semibold text-sm p-1 mr-1"
+                    hx-get="/dash/{{hshd}}/{{offset - 10}}" 
+                    hx-target="#data" hx-swap="outerHTML"
+                >
+                    Prev 10 Rows
+                </button>
+                <h1 class="font-bold">
+                    Rows {{offset}} - {{offset + 10}} for HH No. {{hshd}}
+                </h1>
+                <button 
+                    dir="rtl" 
+                    class="border rounded-s-lg font-semibold text-sm p-1 ml-1"
+                    hx-get="/dash/{{hshd}}/{{offset + 10}}" 
+                    hx-target="#data" hx-swap="outerHTML"
+                >
+                    Next 10 Rows
+                </button>
+            {% else %}
+                {# Full 10 rows, at beginning -> can only move forward #}
+                <button 
+                    dir="ltr" 
+                    class="border rounded-s-lg font-semibold text-sm p-1 mr-1"
+                    hx-get="/dash/{{hshd}}/{{offset - 10}}"
+                    hx-target="#data" hx-swap="outerHTML"
+                    disabled
+                >
+                    Prev 10 Rows
+                </button>
+                <h1 class="font-bold">
+                    Rows {{offset}} - {{offset + 10}} for HH No. {{hshd}}
+                </h1>
+                <button 
+                    dir="rtl" 
+                    class="border rounded-s-lg font-semibold text-sm p-1 ml-1"
+                    hx-get="/dash/{{hshd}}/{{offset + 10}}" 
+                    hx-target="#data" hx-swap="outerHTML"
+                >
+                    Next 10 Rows
+                </button>
+            {% endif %}
+        {% else %}
+            {% if offset > 0 %}
+                {# Less than 10 rows, not at beginning -> can only move backward #}
+                <button 
+                    dir="ltr" 
+                    class="border rounded-s-lg font-semibold text-sm p-1 mr-1"
+                    hx-get="/dash/{{hshd}}/{{offset - 10}}" 
+                    hx-target="#data" hx-swap="outerHTML"
+                >
+                    Prev 10 Rows
+                </button>
+                <h1 class="font-bold">
+                    Rows {{offset}} - {{offset + 10}} for HH No. {{hshd}}
+                </h1>
+                <button 
+                    dir="rtl" 
+                    class="border rounded-s-lg font-semibold text-sm p-1 ml-1"
+                    hx-get="/dash/{{hshd}}/{{offset + 10}}" 
+                    hx-target="#data" hx-swap="outerHTML"
+                    disabled
+                >
+                    Next 10 Rows
+                </button>
+            {% else %}
+                {# Less than 10 rows, at beginning -> can't move #}
+                <h1 class="font-bold">
+                    Rows {{offset}} - {{offset + 10}} for HH No. {{hshd}}
+                </h1>
+            {% endif %}
+        {% endif %}
+        <div class="grow"></div>
+    </div>
+    <table class="border-collapse border border-black my-2">
+        <tr>
+            {% for h in header %}
+                <th class="border border-black px-1 text-sm">{{h}}</th>
+            {% endfor %}
+        </tr>
+        {% for row in rows %}
+            <tr>
+                {% for col in row %}
+                    <td class="border border-black px-1 text-sm">{{col}}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+</div>
