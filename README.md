@@ -6,9 +6,7 @@ web framework to start Web APIs.
 ## TODO (Q4 -> Q5 -> Q6 -> Q1 -> Q7)
 - ~~create users table~~
 - ~~load data into sql~~
-- create household dashboard (let users select household)
-    - https://www.w3schools.com/tags/tag_select.asp
-    - https://stackoverflow.com/a/30525521
+- ~~create household dashboard (let users select household)~~
 - add ability to view latest data (10 most recent results, let user make number bigger)
 - add metrics to dashboard
 - create write-up of AI models 
@@ -31,6 +29,18 @@ cat 8451_The_Complete_Journey_2_Sample-2/400_transactions.csv | tr -d "[:blank:]
 ```
 
 Migrate:
+```bash
+sudo -u postgres createdb cloud
+sudo -u postgres psql -d cloud -f sql/create.sql
+sudo -u postgres psql -d cloud
+\copy households FROM 'sql/households.csv' (format csv, null "null", DELIMITER ',', HEADER);
+\copy products FROM 'sql/products.csv' (format csv, null "null", DELIMITER ',', HEADER);
+\copy transactions FROM 'sql/transactions.csv' (format csv, null "null", DELIMITER ',', HEADER);
+create role app with login password '{password}';
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO app;
+GRANT INSERT ON ALL TABLES IN SCHEMA public TO app;
+```
+
 ```sql
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

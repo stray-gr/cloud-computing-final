@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     username TEXT NOT NULL,
-    password BLOB NOT NULL,
+    password BYTEA NOT NULL,
     email TEXT NOT NULL
 );
 
