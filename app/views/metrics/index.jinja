@@ -1,0 +1,46 @@
+{%- extends "layout.jinja" -%}
+{%- block body -%}
+<div id="frame">
+    {% include "header.html" %}
+    <div class="flex flex-col w-screen items-center mt-4">
+        <button 
+            class="bg-sky-700 border border-black font-semibold text-white p-1" 
+            hx-get="/dash" hx-target="#frame" hx-swap="outerHTML"
+        >
+            View Transactions
+        </button>
+        <div class="border border-black m-2 p-1">
+            <h1 class="font-semibold underline">Income Range vs Total Spend</h1>
+            <div class="flex flex-row">
+                <div class="grow"></div>
+                {{income|safe}}
+                <div class="grow"></div>
+            </div>
+        </div>
+        <div class="border border-black m-2 p-1">
+            <h1 class="font-semibold underline">Household Size vs Total Spend</h1>
+            <div class="flex flex-row">
+                <div class="grow"></div>
+                {{size|safe}}
+                <div class="grow"></div>
+            </div>
+        </div>
+        <div class="border border-black m-2 p-1">
+            <h1 class="font-semibold underline">No. of Children vs Total Spend</h1>
+            <div class="flex flex-row">
+                <div class="grow"></div>
+                {{children|safe}}
+                <div class="grow"></div>
+            </div>
+        </div>
+        <div class="border border-black m-2 p-1">
+            <h1 class="font-semibold underline">Store Location vs Total Spend</h1>
+            <div class="flex flex-row">
+                <div class="grow"></div>
+                {{store|safe}}
+                <div class="grow"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{%- endblock -%}

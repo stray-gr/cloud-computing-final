@@ -14,10 +14,12 @@
             </button>
             <button 
                 class="bg-red-400 border border-black font-semibold text-white text-lg my-1 p-1" 
-                disabled
+                hx-get="/metrics" hx-target="#frame" hx-swap="outerHTML"
+                hx-indicator="#loading"
             >
                 View Market Metrics
             </button>
+            <div id="loading" class="htmx-indicator">Loading...</div>
         </div>
         <div class="grow"></div>
     </div>

@@ -7,7 +7,7 @@ web framework to start Web APIs.
 - ~~create users table~~
 - ~~load data into sql~~
 - ~~create household dashboard (let users select household)~~
-- add ability to view latest data (10 most recent results, let user make number bigger)
+- ~~add ability to view latest data (10 most recent results, let user make number bigger)~~
 - add metrics to dashboard
 - create write-up of AI models 
 - ML IDEA: train model (input is a product, output is a product likely to be bought with input)
