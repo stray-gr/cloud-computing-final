@@ -1,6 +1,6 @@
 from blacksheep.server.controllers import Controller, get
 from blacksheep import Request, redirect
-from app.env import DB_CONN_STR
+from app.env import DB_NAME, DB_USER, DB_PASS, DB_HOST
 import pandas as pd
 import psycopg2 as pg
 
@@ -13,7 +13,7 @@ class Metrics(Controller):
             return redirect("/")
 
         # Query
-        with pg.connect(DB_CONN_STR) as conn:
+        with pg.connect(database=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST) as conn:
             query = \
             ''' 
             SELECT 

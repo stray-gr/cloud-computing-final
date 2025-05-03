@@ -1,6 +1,6 @@
 from blacksheep.server.controllers import Controller, get
 from blacksheep import Request, Response, redirect
-from app.env import DB_CONN_STR
+from app.env import DB_NAME, DB_USER, DB_PASS, DB_HOST
 import psycopg2 as pg
 
 
@@ -39,7 +39,7 @@ class Dash(Controller):
         hshd_num = req.query.get("hshd", ["0010"])[0]
         offset = 0
 
-        with pg.connect(DB_CONN_STR) as conn:
+        with pg.connect(database=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST) as conn:
             cur = conn.cursor()
 
             cur.execute("SELECT DISTINCT HSHD_NUM FROM households ORDER BY HSHD_NUM ASC;")
@@ -95,7 +95,7 @@ class Dash(Controller):
         if offset < 0:
             return Response(204)
 
-        with pg.connect(DB_CONN_STR) as conn:
+        with pg.connect(database=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST) as conn:
             cur = conn.cursor()
             cur.execute(
                 '''
@@ -146,7 +146,7 @@ class Dash(Controller):
         if count < 0:
             return Response(204)
 
-        with pg.connect(DB_CONN_STR) as conn:
+        with pg.connect(database=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST) as conn:
             cur = conn.cursor()
             cur.execute(
                 '''
